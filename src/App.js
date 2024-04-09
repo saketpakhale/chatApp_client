@@ -1,24 +1,38 @@
-import logo from './logo.svg';
-import './App.css';
+import Login from "./components/Login";
+import SignUp from "./components/Signup";
+import ChatRoom from "./components/ChatRoom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { ContactProvider } from './context/ContactProvider';
+import { ConversationProvider } from './context/ConversationsProvider';
+import { SocketProvider } from './context/SocketProvider';
+import useLocalStorage from "./hooks/useLocalStorage";
+import RecievingCall from "./components/RecievingCall";
+import Call from "./components/Call";
+import Calling from "./components/Calling";
 
 function App() {
+  const [id, setId] = useLocalStorage('id');
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div> 
+      <SocketProvider id={id}>
+        <ConversationProvider>
+          <ContactProvider id={id}>
+          
+            <BrowserRouter>          
+              <Routes> 
+                <Route path="/" element={  <ChatRoom id={id} />} />
+                <Route path="/login" element={<Login onIdSubmit={setId} />} />                   
+                <Route path="/signup" element={<SignUp />} />
+                <Route path="/call" element={<Calling id={id} />} />
+                <Route path="/recievecall" element={<RecievingCall id={id} />} />
+              </Routes>
+            </BrowserRouter>
+          </ContactProvider>
+        </ConversationProvider>        
+      </SocketProvider>
+    
     </div>
+    
   );
 }
 
