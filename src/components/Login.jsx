@@ -2,12 +2,14 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Form, Button, Container, Row, Col, Alert } from "react-bootstrap";
 import "./loginsignup.css";
+import config from "../config/config";
 
 function Login({ onIdSubmit }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
+  const backendUrl = config.backendUrl;
 
   async function loginUser() {
     const data = {
@@ -16,7 +18,7 @@ function Login({ onIdSubmit }) {
     };
 
     try {
-      const response = await fetch("http://localhost:3001/login", {
+      const response = await fetch(`${backendUrl}/login`, {
         method: "post",
         headers: {
           "Content-Type": "application/json",

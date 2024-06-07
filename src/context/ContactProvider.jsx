@@ -1,9 +1,9 @@
 import React,{  useContext, useEffect, useState } from "react";
 import { useConversation } from "./ConversationsProvider";
-
+import config from "../config/config";
 
 const ContactContext = React.createContext();
-
+const backendUrl = config.backendUrl;
 export function ContactProvider({id, children}) {
 
     const [contactList, setContactList] = useState([]);
@@ -15,7 +15,7 @@ export function ContactProvider({id, children}) {
     },[id]);
 
     async function fetchContacts() {
-        await fetch("http://localhost:3001/", {
+        await fetch(backendUrl, {
             method: "get",
             headers: {'Content-Type': 'application/json', "authorization": localStorage.getItem("token")},            
           }).then(async (data)=> await data.json()).then((data)=> {
@@ -44,7 +44,7 @@ export function ContactProvider({id, children}) {
             contactName: name
         }
 
-        await fetch("http://localhost:3001/newcontact",{
+        await fetch(`${backendUrl}/newcontact`,{
             method: "post",
             headers: {'Content-Type': 'application/json', "authorization": localStorage.getItem("token")},
             body: JSON.stringify(userInfo),

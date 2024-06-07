@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Form, Button, Container, Row, Col } from "react-bootstrap";
 import "./loginsignup.css";
+import config from "../config/config";
 
 function SignUp() {
 
@@ -9,6 +10,7 @@ function SignUp() {
     const [password, setPassword] = useState("");
     const [cnfPassword, setCnfPassword] = useState("");
     const navigate = useNavigate();
+    const backendUrl = config.backendUrl;
 
     async function signupUser() {
         const data = {
@@ -16,7 +18,7 @@ function SignUp() {
             password: password,
             cnfPassword: cnfPassword,
         }
-        await fetch("http://localhost:3001/signup", {
+        await fetch(`${backendUrl}/signup`, {
         method: "post",
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify(data)
