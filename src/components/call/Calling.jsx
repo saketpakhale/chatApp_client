@@ -1,7 +1,7 @@
 import { useCallback, useContext, useState, useEffect } from "react";
-import { useConversation } from "../context/ConversationsProvider";
-import { useSocket } from "../context/SocketProvider";
-import peer from "../service/peer";
+import { useConversation } from "../../context/ConversationsProvider";
+import { useSocket } from "../../context/SocketProvider";
+import peer from "../../service/peer";
 import { useNavigate } from "react-router-dom";
 import ReactPlayer from "react-player";
 import { Button } from "react-bootstrap";
@@ -12,8 +12,9 @@ function Calling({id}) {
     const {selectedConversation} = useConversation();
     const socket = useSocket();
     const navigate = useNavigate();
-    const [myStream, setMySteam] = useState();
-    const [remoteStream, setRemoteStream] = useState();
+    const [myStream, setMySteam] = useState(null);
+    const [myStream2, setMySteam2] = useState(null);
+    const [remoteStream, setRemoteStream] = useState(null);
 
     const handleCall = useCallback(async () => {
         const offer = await peer.getOffer();
@@ -48,6 +49,7 @@ function Calling({id}) {
             audio: true,
             video: true,
         });
+        setMySteam2(stream);
         for (const track of stream.getTracks()) {
           peer.peer.addTrack(track, stream);
         }
@@ -102,7 +104,19 @@ function Calling({id}) {
     }, [socket]);
 
 
-
+    const handleEndCall = async () => {
+        const tracks = await myStream.getTracks();
+        tracks.forEach(async (track) => {
+            await track.stop();
+        });
+        const tracks2 = await myStream2.getTracks();
+        tracks2.forEach(async (track) => {
+            console.log(track);
+            await track.stop();
+        });
+        await peer.peer.close();
+        navigate("/");
+    }
 
 
 
@@ -125,6 +139,7 @@ function Calling({id}) {
                   style={{backgroundColor:"black"}}
                 />
                 <Button onClick={sendStreams}>Send Stream</Button>
+                <Button onClick={handleEndCall}>End call</Button>
                 </>
             }
         </div>

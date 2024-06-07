@@ -1,7 +1,7 @@
 import { ListGroup } from "react-bootstrap";
-import { useContacts } from "../context/ContactProvider";
+import { useContacts } from "../../context/ContactProvider";
 import { v4 as uuid } from 'uuid';
-import { useConversation } from "../context/ConversationsProvider";
+import { useConversation } from "../../context/ConversationsProvider";
 
 
 function Contacts({id}) {

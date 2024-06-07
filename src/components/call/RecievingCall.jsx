@@ -1,9 +1,9 @@
 
-import { useSocket } from "../context/SocketProvider";
+import { useSocket } from "../../context/SocketProvider";
 import { Modal, Button } from "react-bootstrap";
-import { useContacts } from "../context/ContactProvider";
+import { useContacts } from "../../context/ContactProvider";
 import { useState, useEffect, useCallback } from "react";
-import peer from "../service/peer";
+import peer from "../../service/peer";
 import { useNavigate } from "react-router-dom";
 import ReactPlayer from "react-player";
 
@@ -18,6 +18,7 @@ function RecievingCall({id}) {
     const {createContact, contactList} = useContacts();
     const navigate = useNavigate();
     const [remoteStream, setRemoteStream] = useState();
+    const [myStream, setMySteam] = useState();
 
     const handleIncommingCall = useCallback( ({from, offer}) => {
         console.log(from, offer);
@@ -48,14 +49,15 @@ function RecievingCall({id}) {
 
     }, [socket, handleIncommingCall]);
 
-    const sendStreams =  () => {
-        // const stream = await navigator.mediaDevices.getUserMedia({
-        //     audio: true,
-        //     video: true,
-        // });
-        // for (const track of stream.getTracks()) {
-        //   peer.peer.addTrack(track, stream);
-        // }
+    const sendStreams =  async () => {
+        const stream = await navigator.mediaDevices.getUserMedia({
+            audio: true,
+            video: true,
+        });
+        for (const track of stream.getTracks()) {
+          peer.peer.addTrack(track, stream);
+        }
+        setMySteam(stream);
         console.log("sending tracks");
     }; 
 
@@ -92,7 +94,7 @@ function RecievingCall({id}) {
         async ({ from, offer }) => {
           const ans = await peer.getAnswer(offer);
           socket.emit("peer:nego:done", { to: from, from: id, ans });
-          // sendStreams();
+          sendStreams();
           console.log("negotiation done");
         },
         [socket]
@@ -137,7 +139,23 @@ function RecievingCall({id}) {
                 
                 </>
             }
+            {
+                myStream &&
+                <>
+                <h1>My Stream</h1>          
+                <ReactPlayer
+                  playing
+                  muted
+                  height="100px"
+                  width="200px"
+                  url={myStream}
+                  style={{backgroundColor:"black"}}
+                />
+                
+                </>
+            }
             <Button onClick={sendStreams}>Send Stream</Button> 
+            <Button onClick={() =>{}}>End call</Button>
         </div>
     )
 }

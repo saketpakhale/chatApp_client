@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef, useCallback } from "react";
-import { useConversation } from "../context/ConversationsProvider";
-import { useSocket } from "../context/SocketProvider";
-import peer from "../service/peer";
+import { useConversation } from "../../context/ConversationsProvider";
+import { useSocket } from "../../context/SocketProvider";
+import peer from "../../service/peer";
 import { useNavigate } from "react-router-dom";
 import ReactPlayer from "react-player";
 
@@ -34,7 +34,7 @@ function RecieveCall({id}) {
         if(selectedConversation) {
             setReciever(selectedConversation);
             
-            // handleRecieveUser();
+            handleRecieveUser();
         }
 
     }, []);
@@ -54,7 +54,7 @@ function RecieveCall({id}) {
       async ({ from, offer }) => {
         const ans = await peer.getAnswer(offer);
         socket.emit("peer:nego:done", { to: from, from: id, ans });
-        // sendStreams();
+        sendStreams();
       },
       [socket]
     );

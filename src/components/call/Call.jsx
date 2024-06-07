@@ -1,7 +1,7 @@
 import { useEffect, useState, useCallback, useRef } from "react";
-import { useConversation } from "../context/ConversationsProvider";
-import { useSocket } from "../context/SocketProvider";
-import peer from "../service/peer";
+import { useConversation } from "../../context/ConversationsProvider";
+import { useSocket } from "../../context/SocketProvider";
+import peer from "../../service/peer";
 import { useNavigate } from "react-router-dom";
 import ReactPlayer from "react-player";
 

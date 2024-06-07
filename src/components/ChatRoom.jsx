@@ -1,5 +1,5 @@
-import ContactSection from "./ContactsSection";
-import ChatSection from "./ChatSection";
+import ContactSection from "./contactSection/ContactsSection";
+import ChatSection from "./chatSection/ChatSection";
 import { Modal, Button } from "react-bootstrap";
 import { useSocket } from "../context/SocketProvider";
 import { useContacts } from "../context/ContactProvider";

@@ -6,9 +6,9 @@ import { ContactProvider } from './context/ContactProvider';
 import { ConversationProvider } from './context/ConversationsProvider';
 import { SocketProvider } from './context/SocketProvider';
 import useLocalStorage from "./hooks/useLocalStorage";
-import RecievingCall from "./components/RecievingCall";
-import Call from "./components/Call";
-import Calling from "./components/Calling";
+import RecievingCall from "./components/call/RecievingCall";
+// import Call from "./components/call/Call";
+import Calling from "./components/call/Calling";
 
 function App() {
   const [id, setId] = useLocalStorage('id');
